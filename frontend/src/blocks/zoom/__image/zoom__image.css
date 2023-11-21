@@ -1,0 +1,8 @@
+.zoom__image{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 75vw;
+  max-height: 75vh;
+  position: relative;
+}

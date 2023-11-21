@@ -1,0 +1,12 @@
+.link{
+font-size: 18px;
+font-weight: 400;
+line-height: 22px;
+color: #FFFFFF;
+text-decoration: none;
+}
+
+.link:hover{
+    transition: opacity 1s ease-in-out;
+    opacity: 0.6;
+}

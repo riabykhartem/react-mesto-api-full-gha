@@ -1,0 +1,11 @@
+.page{
+    font-family: 'Inter', Arial, sans-serif;
+    background-color:#000000;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    flex-direction: column;
+
+}

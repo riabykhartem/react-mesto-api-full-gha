@@ -1,0 +1,12 @@
+.element__trash-button{
+  background-image: url('../../../images/Trash.svg');
+  position: absolute;
+  width: 18px;
+  height: 19px;
+  background-position: center;
+  background-color: transparent;
+  border: none;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+}

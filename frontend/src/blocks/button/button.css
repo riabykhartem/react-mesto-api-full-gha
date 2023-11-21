@@ -1,0 +1,12 @@
+.button{
+    background-color: inherit;
+    border: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    background-position: center;
+}
+.button:hover{
+    transition: opacity 1s ease-in-out;
+    opacity: 0.6;
+}

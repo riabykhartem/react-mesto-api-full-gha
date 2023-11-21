@@ -1,0 +1,11 @@
+.page__container{
+    width: calc(100% - 19px*2);
+    max-width: 880px;
+    margin: 0 auto;
+}
+@media screen and (max-width:875px) {
+  .page__container{
+    width: 100%;
+  }
+
+}

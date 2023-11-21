@@ -1,0 +1,7 @@
+.zoom{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  position: relative;
+}

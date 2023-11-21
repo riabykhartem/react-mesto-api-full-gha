@@ -1,0 +1,16 @@
+.header{
+    margin-top: 45px;
+    border-bottom: solid rgba(84, 84, 84, 0.7);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    justify-items: flex-start;
+
+}
+@media screen and (max-width:875px) {
+    .header{
+        margin-top: 28px;
+    }
+
+
+}
