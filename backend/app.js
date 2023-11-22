@@ -34,6 +34,7 @@ app.use((err, req, res) => {
         ? 'На сервере произошла ошибка'
         : message,
     });
+    next()
 });
 
-app.listen(PORT);
+app.listen(3000);
