@@ -108,7 +108,7 @@ class Api  {
 }
 
 const api = new Api({
-  url:  "http://api.mesto.riabykh.nomoredomainsrocks.ru",
+  url:  "https://api.mesto.riabykh.nomoredomainsrocks.ru",
 });
 
 export default api;
