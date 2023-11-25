@@ -34,7 +34,6 @@ app.use((err, req, res) => {
         ? 'На сервере произошла ошибка'
         : message,
     });
-    next()
 });
 
 app.listen(3000);
