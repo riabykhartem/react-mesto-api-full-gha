@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { JWT_SECRET } = process.env;
 const JWT = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/user');
@@ -6,7 +7,6 @@ const ConflictError = require('../errors/ConflictError');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const NotAuthoirizedError = require('../errors/NotAuthoirizedError');
-const { SECRET_KEY } = require('../utils/constants');
 
 const getUsers = (req, res) => User.find({})
   .then((users) => res.status(200).send(users))
@@ -106,7 +106,7 @@ const login = async (req, res, next) => {
 
   const payload = { _id: user._id };
 
-  const token = JWT.sign(payload, SECRET_KEY, { expiresIn: '7d' });
+  const token = JWT.sign(payload, JWT_SECRET, { expiresIn: '7d' });
   return res.status(200).send({ token });
 };
 
