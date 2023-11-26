@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+
 const { JWT_SECRET } = process.env;
 const JWT = require('jsonwebtoken');
 const mongoose = require('mongoose');
