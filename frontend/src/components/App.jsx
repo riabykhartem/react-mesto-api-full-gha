@@ -15,12 +15,11 @@ import Register from "./Register/Register";
 import Login from "./login/Login"
 import InfoTooltip from "./infoTooltip/InfoTooltip";
 import auth from '../utils/auth'
-import success from "../images/Union.svg"
-import fail from "../images/registration-failed.svg"
+import LoginInfoTooltip from "./infoTooltip/LoginInfoToolTip.jsx";
 
 function App() {
   //стейты
-  const [loggedIn, setloggedIn] = useState(true);
+  const [loggedIn, setloggedIn] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -30,6 +29,7 @@ function App() {
   const [initialCards, setInitialCards] = useState([]);
   const [isSignedup, setIsSignedup] =useState(false);
   const [isInfoTooltipPopupOpened, setisInfoTooltipPopupOpened] = useState(false);
+  const [isLoginInfoTooltipPopupOpened, setisLoginInfoTooltipPopupOpened] = useState(false);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [email, setEmail] = useState(null)
   
@@ -108,7 +108,8 @@ function App() {
     setAddPlacePopupOpen(false);
     setEditProfilePopupOpen(false);
     setZoomedCardOpen(false);
-    setisInfoTooltipPopupOpened(false)
+    setisInfoTooltipPopupOpened(false);
+    setisLoginInfoTooltipPopupOpened(false)
   }
 
   function handleUpdateUser(newUserData) {
@@ -149,7 +150,11 @@ function App() {
       navigate('/sign-in')
     }
     )
-    .catch((err) => console.error(`ошибка при регистрации: ${err}`))
+    .catch((err) => {
+      setIsSignedup(false)
+      return console.error(`ошибка при регистрации: ${err}`)
+    }
+    )
     .finally(
       setisInfoTooltipPopupOpened(true)
     )
@@ -161,7 +166,11 @@ function App() {
       setToken(res.token)
       localStorage.setItem('token', res.token)
       navigate('/',{replace:true})
-    }).catch(()=>setisInfoTooltipPopupOpened(true))
+    }).catch(()=>{
+      setloggedIn(false)
+      setisLoginInfoTooltipPopupOpened(true)
+    }
+      )
   }
 
   function logOut(){
@@ -232,19 +241,9 @@ function App() {
           onCardClick={handleCardClick}
           onClose={closeAllPopups}
         />
-        <InfoTooltip isOpened={isInfoTooltipPopupOpened} onClose={closeAllPopups}>
-               {isSignedup || loggedIn ? 
-                    <figure className="info-tooltip__container">
-                        <img src={success} alt="Галочка" className="info-tooltip__image"/>
-                        <figcaption className="info-tooltip__caption">Вы успешно зарегистрировались!</figcaption>
-                    </figure>
-            :
-                <figure className="info-tooltip__container">
-                    <img src={fail} alt="крестик" className="info-tooltip__image"/>
-                    <figcaption className="info-tooltip__caption">Что-то пошло не так! Попробуйте ещё раз.</figcaption>
-                </figure>} 
-
-        </InfoTooltip>
+        <InfoTooltip isOpened={isInfoTooltipPopupOpened} onClose={closeAllPopups} isSignedup={isSignedup}/>
+        <LoginInfoTooltip isOpened={isLoginInfoTooltipPopupOpened} onClose={closeAllPopups} isLogedIn={loggedIn}/>
+  
       </div>
     </CurrentUserContext.Provider>
   );

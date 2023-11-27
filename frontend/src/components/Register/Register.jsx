@@ -34,7 +34,7 @@ const Register = (props) => {
             onChange={(evt) => {
                 setPassword(evt.target.value)}
             }
-            type="text"
+            type="password"
             className="login-form_input"
             placeholder="Пароль"
           ></input>

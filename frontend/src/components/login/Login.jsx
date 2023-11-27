@@ -29,7 +29,7 @@ const Login = (props) => {
             placeholder="Email"
           ></input>
           <input
-            type="text"
+            type="password"
             className="login-form_input"
             placeholder="Пароль"
             value={password}

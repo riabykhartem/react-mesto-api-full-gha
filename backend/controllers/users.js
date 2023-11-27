@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 const JWT = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/user');
@@ -107,7 +107,7 @@ const login = async (req, res, next) => {
 
   const payload = { _id: user._id };
 
-  const token = JWT.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+  const token = JWT.sign(payload, NODE_ENV === 'production' ? JWT_SECRET : 'cheburashka', { expiresIn: '7d' });
   return res.status(200).send({ token });
 };
 

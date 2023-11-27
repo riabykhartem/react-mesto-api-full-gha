@@ -2,7 +2,7 @@ import React from "react";
 import success from "../../images/Union.svg"
 import fail from "../../images/registration-failed.svg"
 
-const InfoTooltip = ({ isOpened, onClose, isSignedup }) => {
+const LoginInfoTooltip = ({ isOpened, onClose, isLogedIn }) => {
   return (
     <div className={`popup ${isOpened && "popup_opened"}`}>
       <div className="popup__container">
@@ -11,11 +11,11 @@ const InfoTooltip = ({ isOpened, onClose, isSignedup }) => {
           className="button popup__close-button"
           onClick={onClose}
         />
-        {isSignedup ? (
+        {isLogedIn ? (
           <figure className="info-tooltip__container">
             <img src={success} alt="Галочка" className="info-tooltip__image" />
             <figcaption className="info-tooltip__caption">
-              Вы успешно зарегистрировались!
+              Вы успешно залогились!
             </figcaption>
           </figure>
         ) : (
@@ -31,4 +31,4 @@ const InfoTooltip = ({ isOpened, onClose, isSignedup }) => {
   );
 };
 
-export default InfoTooltip;
+export default LoginInfoTooltip;
