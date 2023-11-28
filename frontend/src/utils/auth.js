@@ -8,7 +8,7 @@ class Auth{
     };
 
     register(data){
-        return fetch(`${this._baseUrl}/signup`, {
+        fetch(`${this._baseUrl}/signup`, {
             method: 'POST',
             headers:{
                 "Content-Type": "application/json"
@@ -21,7 +21,7 @@ class Auth{
     }
 
     login(data, token){
-        return fetch(`${this._baseUrl}/signin`, {
+        fetch(`${this._baseUrl}/signin`, {
             method: 'POST',
             headers:{
                 "Content-Type": "application/json",
@@ -35,7 +35,7 @@ class Auth{
     }
 
     getContent(token){
-        return fetch(`${this._baseUrl}/users/me`, {
+        fetch(`${this._baseUrl}/users/me`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

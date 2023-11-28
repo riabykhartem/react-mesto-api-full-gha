@@ -8,7 +8,7 @@ class Api  {
   }
 
   getUserInfo(token) {
-    return fetch(`${this._url}/users/me`, {
+    fetch(`${this._url}/users/me`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
@@ -19,7 +19,7 @@ class Api  {
   }
 
   getInitialCards(token) {
-    return fetch(`${this._url}/cards`, {
+    fetch(`${this._url}/cards`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
@@ -30,7 +30,7 @@ class Api  {
   }
 
   setUserInfo(data, token) {
-    return fetch(`${this._url}/users/me`, {
+    fetch(`${this._url}/users/me`, {
       method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -44,7 +44,7 @@ class Api  {
   }
 
   setAvatar(data, token) {
-    return fetch(`${this._url}/users/me/avatar`, {
+    fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -57,7 +57,7 @@ class Api  {
   }
 
   addCard(data, token) {
-    return fetch(`${this._url}/cards`, {
+    fetch(`${this._url}/cards`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -71,7 +71,7 @@ class Api  {
   }
 
   putLike(cardId, token) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
+    fetch(`${this._url}/cards/${cardId}/likes`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -81,7 +81,7 @@ class Api  {
   }
 
   deleteLike(cardId, token) {
-    return fetch(`${this._url}/cards/${cardId}/likes`, {
+    fetch(`${this._url}/cards/${cardId}/likes`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -98,7 +98,7 @@ class Api  {
   }
 
   deleteCard(cardId, token) {
-    return fetch(`${this._url}/cards/${cardId}`, {
+    fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`,
