@@ -33,32 +33,34 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [email, setEmail] = useState(null)
   
-  useEffect(()=>{
+  
+  useEffect(()=>{ 
     tokenCheck()
-    Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
-    .then(([userData, cardsData])=>{
-      setCurrentUser({name: userData.name, about: userData.about, avatar: userData.avatar, _id:userData._id})
-      setInitialCards(cardsData)
-    }).catch((err)=>{
-      console.log('проблема с получением информации о пользователе и карточек');
+    if(localStorage.getItem('token')){
+      setloggedIn(true)
+      Promise.all([api.getUserInfo(token), api.getInitialCards(token)]) 
+    .then(([userData, cardsData])=>{ 
+      setCurrentUser({name: userData.name, about: userData.about, avatar: userData.avatar, _id:userData._id}) 
+      setInitialCards(cardsData) 
+    }).catch((err)=>{ 
+      console.log('проблема с получением информации о пользователе и карточек'); 
     })
-  },[token])
-
-  function tokenCheck(){
-    if(!token){
-      return
     }
-    auth.getContent(token)
-    .then(res =>{
-      setEmail(res.email)
-    setloggedIn(true)})
-    .catch((err) => {
-      console.error(`ошибка при получении данных пользователя: ${err}`)}
-      )
-  }
+    async function tokenCheck() {
+      try {
+        if (!token) {
+          return;
+        }
+        const res = await auth.getContent(token);
+        setEmail(res.email);
+        setloggedIn(true);
+      } catch (err) {
+        console.error(`Error fetching user data: ${err}`);
+      }
+    }
+  },[token]) 
 
   const navigate = useNavigate()
-
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true);
@@ -162,7 +164,7 @@ function App() {
 
 
   function handleSingIn(credentials){
-    auth.login(credentials).then((res) =>{
+    return auth.login(credentials).then((res) =>{
       setToken(res.token)
       localStorage.setItem('token', res.token)
       navigate('/',{replace:true})
@@ -176,31 +178,26 @@ function App() {
   function logOut(){
     setloggedIn(false)
     localStorage.removeItem('token')
-    
   }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <div className="page__container">
-        
+      <div className="page__container"> 
         <Routes>
           <Route
             path="/"
             element={
               <ProtectedRouteElement
-                element={
-                  <Main
-                    onEditAvatar={handleEditAvatarClick}
-                    onEditProfile={handleEditProfileClick}
-                    onAddPlaceClick={handleAddPlaceClick}
-                    onCardClick={handleCardClick}
-                    initialCards={initialCards}
-                    onLike={handleCardLike}
-                    onDelete={handleCardDelete}
-                    email={email}
-                    onLogOut={logOut}
-                  />
-                }
+                element={Main}
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlaceClick={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+                initialCards={initialCards}
+                onLike={handleCardLike}
+                onDelete={handleCardDelete}
+                email={email}
+                onLogOut={logOut}
                 loggedIn={loggedIn}
               />
             }
