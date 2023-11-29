@@ -8,29 +8,23 @@ class Api  {
   }
 
   getUserInfo(token) {
-    fetch(`${this._url}/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
     }).then(this._getResponseData)
-    .catch((err) =>{
-      console.log(err);
-    });
   }
 
   getInitialCards(token) {
-    fetch(`${this._url}/cards`, {
+    return fetch(`${this._url}/cards`, {
       headers: {
         "Authorization": `Bearer ${token}`,
       },
     }).then(this._getResponseData)
-    .catch((err) =>{
-      console.log(err);
-    });
   }
 
   setUserInfo(data, token) {
-    fetch(`${this._url}/users/me`, {
+    return fetch(`${this._url}/users/me`, {
       method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -44,7 +38,7 @@ class Api  {
   }
 
   setAvatar(data, token) {
-    fetch(`${this._url}/users/me/avatar`, {
+    return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -53,11 +47,11 @@ class Api  {
       body: JSON.stringify({
         avatar: data.avatar,
       }),
-    }).then(this._getResponseData);
+    }).then(this._getResponseData)
   }
 
   addCard(data, token) {
-    fetch(`${this._url}/cards`, {
+    return fetch(`${this._url}/cards`, {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -71,7 +65,7 @@ class Api  {
   }
 
   putLike(cardId, token) {
-    fetch(`${this._url}/cards/${cardId}/likes`, {
+    return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: "PUT",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -81,7 +75,7 @@ class Api  {
   }
 
   deleteLike(cardId, token) {
-    fetch(`${this._url}/cards/${cardId}/likes`, {
+  return fetch(`${this._url}/cards/${cardId}/likes`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -98,7 +92,7 @@ class Api  {
   }
 
   deleteCard(cardId, token) {
-    fetch(`${this._url}/cards/${cardId}`, {
+  return fetch(`${this._url}/cards/${cardId}`, {
       method: "DELETE",
       headers: {
         "Authorization": `Bearer ${token}`,
