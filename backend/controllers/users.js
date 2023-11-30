@@ -9,9 +9,9 @@ const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const NotAuthoirizedError = require('../errors/NotAuthoirizedError');
 
-const getUsers = (req, res) => User.find({})
+const getUsers = (req, res, next) => User.find({})
   .then((users) => res.status(200).send(users))
-  .catch(() => res.status(500).send({ message: 'Server Error' }));
+  .catch((err) => next(err));
 
 const createUser = (req, res, next) => {
   const {
@@ -36,23 +36,23 @@ const createUser = (req, res, next) => {
     });
 };
 
-const getUserById = (req, res) => {
+const getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .orFail(new Error('NotValiId'))
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.message === 'NotValiId') {
-        return res.status(404).send({ message: 'user not found' });
+        next(new NotFoundError('полльзователь не найден'));
       }
       if (err.name === 'CastError') {
-        return res.status(400).send({ message: 'incorrect id' });
+        next(new BadRequestError('некорректный id пользователя'));
       }
-      return res.status(500).send({ message: 'Server Error' });
+      next(err);
     });
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   const { name, about } = req.body;
   return User.findByIdAndUpdate(
     req.user._id,
@@ -62,17 +62,13 @@ const updateUser = (req, res) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({
-          message: `${Object.values(err.errors)
-            .map((e) => e.message)
-            .join(', ')}`,
-        });
+        next(new BadRequestError(err.message));
       }
-      return res.status(500).send({ message: 'Server Error' });
+      next(err);
     });
 };
 
-const updateAvatar = (req, res) => {
+const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   return User.findByIdAndUpdate(
     req.user._id,
@@ -82,13 +78,9 @@ const updateAvatar = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(400).send({
-          message: `${Object.values(err.errors)
-            .map((e) => e.message)
-            .join(', ')}`,
-        });
+        next(new BadRequestError(err.message));
       }
-      return res.status(500).send({ message: 'Server Error' });
+      next(err);
     });
 };
 
@@ -97,12 +89,12 @@ const login = async (req, res, next) => {
 
   const user = await User.findOne({ email }).select('+password');
   if (!user) {
-    return next(new NotAuthoirizedError('Неправильные почта или пароль'));
+    next(new NotAuthoirizedError('Неправильные почта или пароль'));
   }
 
   const matched = await bcrypt.compare(password, user.password);
   if (!matched) {
-    return next(new NotAuthoirizedError('Неправильные почта или пароль'));
+    next(new NotAuthoirizedError('Неправильные почта или пароль'));
   }
 
   const payload = { _id: user._id };
@@ -115,12 +107,12 @@ const getCurrentUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      throw new NotFoundError('User not found');
+      next(new NotFoundError('User not found'));
     }
 
     res.status(200).send(user);
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 };
 

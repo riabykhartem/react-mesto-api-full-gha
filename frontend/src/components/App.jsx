@@ -36,9 +36,8 @@ function App() {
   const [email, setEmail] = useState(null);
 
   useEffect(() => {
-    console.log(loggedIn);
     tokenCheck();
-    if (localStorage.getItem("token")) {
+    if (loggedIn) {
       setloggedIn(true);
       Promise.all([api.getUserInfo(token), api.getInitialCards(token)])
         .then(([userData, cardsData]) => {
@@ -173,6 +172,7 @@ function App() {
       const res = await auth.login(credentials);
       setToken(res.token);
       localStorage.setItem("token", res.token);
+      setloggedIn(true)
       navigate("/", { replace: true });
     } catch (error) {
       console.log(error);

@@ -47,5 +47,4 @@ class Auth {
 const auth = new Auth({
   baseUrl: "https://api.mesto.riabykh.nomoredomainsrocks.ru",
 });
-
 export default auth;
