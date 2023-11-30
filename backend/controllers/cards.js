@@ -20,9 +20,9 @@ const createCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new NotFoundError('карточка не найдена'));
+        next(new NotFoundError('карточка не найдена'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -30,7 +30,7 @@ const deleteCardById = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
-        return next(new ForbiddenError('Карточка другого пользователя'));
+        next(new ForbiddenError('Карточка другого пользователя'));
       }
       return Card.deleteOne(card)
         .orFail()
@@ -47,9 +47,9 @@ const deleteCardById = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'TypeError') {
-        return next(new NotFoundError(`Карточка с _id: ${req.params.cardId} не найдена.`));
+        next(new NotFoundError(`Карточка с _id: ${req.params.cardId} не найдена.`));
       }
-      return next(err);
+      next(err);
     });
 };
 const likeCard = (req, res, next) => {
@@ -63,12 +63,12 @@ const likeCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.message === 'NotValiId') {
-        return next(new NotFoundError('карточка не найдена'));
+        next(new NotFoundError('карточка не найдена'));
       }
       if (err.name === 'CastError') {
-        return next(new BadRequestError('некоректный id карточки'));
+        next(new BadRequestError('некоректный id карточки'));
       }
-      return next(err);
+      next(err);
     });
 };
 
@@ -83,12 +83,12 @@ const removeLike = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new BadRequestError('некоректный id карточки'));
+        next(new BadRequestError('некоректный id карточки'));
       }
       if (err.message === 'NotValiId') {
-        return next(new NotFoundError('карточка не найдена'));
+        next(new NotFoundError('карточка не найдена'));
       }
-      return next(err);
+      next(err);
     });
 };
 

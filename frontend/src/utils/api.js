@@ -102,7 +102,7 @@ class Api  {
 }
 
 const api = new Api({
-  url: "https://api.mesto.riabykh.nomoredomainsrocks.ru",
+  url: "http://localhost:3000",
 });
-
+//https://api.mesto.riabykh.nomoredomainsrocks.ru
 export default api;

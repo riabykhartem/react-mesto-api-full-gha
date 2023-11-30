@@ -27,7 +27,7 @@ function App() {
   const [isZoomPopupOpen, setZoomedCardOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
   const [initialCards, setInitialCards] = useState([]);
-  const [isSignedup, setIsSignedup] = useState(localStorage.getItem("token") ? true : false);
+  const [isSignedup, setIsSignedup] = useState(false);
   const [isInfoTooltipPopupOpened, setisInfoTooltipPopupOpened] =
     useState(false);
   const [isLoginInfoTooltipPopupOpened, setisLoginInfoTooltipPopupOpened] =
@@ -36,6 +36,7 @@ function App() {
   const [email, setEmail] = useState(null);
 
   useEffect(() => {
+    console.log(loggedIn);
     tokenCheck();
     if (loggedIn) {
       setloggedIn(true);
@@ -64,10 +65,11 @@ function App() {
         setEmail(res.email);
         setloggedIn(true);
       } catch (err) {
+        setloggedIn(false)
         console.error(`Error fetching user data: ${err}`);
       }
     }
-  }, [token, loggedIn]);
+  }, [token]);
 
   const navigate = useNavigate();
 
