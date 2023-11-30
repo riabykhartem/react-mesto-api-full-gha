@@ -11,7 +11,7 @@ const getCards = (req, res, next) => Card.find({})
 
 const createCard = (req, res, next) => {
   const { name, link } = req.body;
-  Card.create({ name, link, owner: req.user._id })
+  return Card.create({ name, link, owner: req.user._id })
     .then((card) => {
       Card.findById(card._id)
         .populate('owner')
@@ -20,9 +20,9 @@ const createCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new NotFoundError('карточка не найдена'));
+        return next(new NotFoundError('карточка не найдена'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -30,26 +30,25 @@ const deleteCardById = (req, res, next) => {
   Card.findById(req.params.cardId)
     .then((card) => {
       if (card.owner.toString() !== req.user._id) {
-        next(new ForbiddenError('Карточка другого пользователя'));
+        return next(new ForbiddenError('Карточка другого пользователя'));
       }
       return Card.deleteOne(card)
         .orFail()
         .then(() => res.status(200).send({ message: 'Карточка удалена' }))
         .catch((err) => {
           if (err instanceof mongoose.Error.DocumentNotFoundError) {
-            next(new NotFoundError(`Карточка с _id: ${req.params.cardId} не найдена.`));
-          } else if (err instanceof mongoose.Error.CastError) {
-            next(new BadRequestError(`Некорректный _id карточки: ${req.params.cardId}`));
-          } else {
-            next(err);
+            return next(new NotFoundError(`Карточка с _id: ${req.params.cardId} не найдена.`));
+          } if (err instanceof mongoose.Error.CastError) {
+            return next(new BadRequestError(`Некорректный _id карточки: ${req.params.cardId}`));
           }
+          return next(err);
         });
     })
     .catch((err) => {
       if (err.name === 'TypeError') {
-        next(new NotFoundError(`Карточка с _id: ${req.params.cardId} не найдена.`));
+        return next(new NotFoundError(`Карточка с _id: ${req.params.cardId} не найдена.`));
       }
-      next(err);
+      return next(err);
     });
 };
 const likeCard = (req, res, next) => {
@@ -63,12 +62,12 @@ const likeCard = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.message === 'NotValiId') {
-        next(new NotFoundError('карточка не найдена'));
+        return next(new NotFoundError('карточка не найдена'));
       }
       if (err.name === 'CastError') {
-        next(new BadRequestError('некоректный id карточки'));
+        return next(new BadRequestError('некоректный id карточки'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -83,12 +82,12 @@ const removeLike = (req, res, next) => {
     .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequestError('некоректный id карточки'));
+        return next(new BadRequestError('некоректный id карточки'));
       }
       if (err.message === 'NotValiId') {
-        next(new NotFoundError('карточка не найдена'));
+        return next(new NotFoundError('карточка не найдена'));
       }
-      next(err);
+      return next(err);
     });
 };
 

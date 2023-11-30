@@ -27,12 +27,11 @@ const createUser = (req, res, next) => {
     }))
     .catch((err) => {
       if (err.code === 11000) {
-        next(new ConflictError(err.message));
-      } else if (err instanceof mongoose.Error.ValidationError) {
-        next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
-      } else {
-        next(err);
+        return next(new ConflictError(err.message));
+      } if (err instanceof mongoose.Error.ValidationError) {
+        return next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
       }
+      return next(err);
     });
 };
 
@@ -43,12 +42,12 @@ const getUserById = (req, res, next) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.message === 'NotValiId') {
-        next(new NotFoundError('полльзователь не найден'));
+        return next(new NotFoundError('полльзователь не найден'));
       }
       if (err.name === 'CastError') {
-        next(new BadRequestError('некорректный id пользователя'));
+        return next(new BadRequestError('некорректный id пользователя'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -62,9 +61,9 @@ const updateUser = (req, res, next) => {
     .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError(err.message));
+        return next(new BadRequestError(err.message));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -78,9 +77,9 @@ const updateAvatar = (req, res, next) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequestError(err.message));
+        return next(new BadRequestError(err.message));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -89,12 +88,12 @@ const login = async (req, res, next) => {
 
   const user = await User.findOne({ email }).select('+password');
   if (!user) {
-    next(new NotAuthoirizedError('Неправильные почта или пароль'));
+    return next(new NotAuthoirizedError('Неправильные почта или пароль'));
   }
 
   const matched = await bcrypt.compare(password, user.password);
   if (!matched) {
-    next(new NotAuthoirizedError('Неправильные почта или пароль'));
+    return next(new NotAuthoirizedError('Неправильные почта или пароль'));
   }
 
   const payload = { _id: user._id };
@@ -107,12 +106,12 @@ const getCurrentUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
-      next(new NotFoundError('User not found'));
+      return next(new NotFoundError('User not found'));
     }
 
-    res.status(200).send(user);
+    return res.status(200).send(user);
   } catch (err) {
-    next(err);
+    return next(err);
   }
 };
 

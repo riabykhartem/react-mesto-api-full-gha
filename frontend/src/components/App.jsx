@@ -36,7 +36,6 @@ function App() {
   const [email, setEmail] = useState(null);
 
   useEffect(() => {
-    console.log(loggedIn);
     tokenCheck();
     if (loggedIn) {
       setloggedIn(true);
